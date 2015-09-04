@@ -1,0 +1,11 @@
+LR_IROM1 0x00008000 0x38000  {    ; load region (32k offset), size (256k - 32k)
+  ER_IROM1 0x00008000 0x38000  {  ; load address = execution address
+   *.o (RESET, +First)
+   *(InRoot$$Sections)
+   .ANY (+RO)
+  }
+  RW_IRAM1 0x1FFFE000 0x8000 {   ; RAM (32k)
+   .ANY (+RW +ZI)
+  }
+}
+

@@ -457,6 +457,7 @@ status_t flash_get_property(flash_driver_t * driver, flash_property_t whichPrope
 
 //@}
 
+
 //! @name Cache
 //@{
 
@@ -466,17 +467,35 @@ status_t flash_get_property(flash_driver_t * driver, flash_property_t whichPrope
 static inline void flash_cache_enable(bool doEnable)
 {
 #if FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS
-    MCM_WR_PLACR_DFCC(MCM, doEnable);
-#elif defined(CPU_MK66FN2M0VLQ18) || defined(CPU_MK65FN2M0VMI18)
-		FMC_WR_PFB01CR_B0DCE(FMC, doEnable);
-	  FMC_WR_PFB23CR_B1DCE(FMC, doEnable);
+    #if defined(MCM0)
+	      if(doEnable) MCM0->PLACR |= MCM_PLACR_CFCC_MASK;
+	      else         MCM0->PLACR &= ~MCM_PLACR_CFCC_MASK;
+    #else
+	      if(doEnable) MCM->PLACR |= MCM_PLACR_CFCC_MASK;
+	      else         MCM->PLACR &= ~MCM_PLACR_CFCC_MASK;
+    #endif
+#elif defined(CPU_MK66FN2M0VLQ18) || defined(CPU_MK66FN2M0VMD18) || defined(CPU_MK65FN2M0VMI18)
+	  if(doEnable) 
+			FMC->PFB01CR |= FMC_PFB01CR_B0DCE_MASK;
+		  FMC->PFB23CR |= FMC_PFB23CR_B1DCE_MASK;
+		else
+			FMC->PFB01CR &= ~FMC_PFB01CR_B0DCE_MASK;
+		  FMC->PFB23CR &= ~FMC_PFB23CR_B1DCE_MASK;
 #elif FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS
-	  FMC_WR_PFB0CR_B0DCE(FMC, doEnable);
-	  FMC_WR_PFB0CR_B0ICE(FMC, doEnable);
-#ifdef FMC_PFB1CR_B1DCE_MASK // Some chips only have 1 flash bank (K20, K24S for example)
-	  FMC_WR_PFB1CR_B1DCE(FMC, doEnable);
-	  FMC_WR_PFB1CR_B1ICE(FMC, doEnable);
+#if defined(CPU_MKV58F1M0VLQ22)
+	  //
+#else
+	  if(doEnable) 
+			FMC->PFB0CR |= (FMC_PFB0CR_B0DCE_MASK | FMC_PFB0CR_B0ICE_MASK);
+		else
+			FMC->PFB0CR &= ~(FMC_PFB0CR_B0DCE_MASK | FMC_PFB0CR_B0ICE_MASK);		
 #endif
+#ifdef FMC_PFB1CR_B1DCE_MASK // Some chips only have 1 flash bank (K20, K24S for example)
+	  if(doEnable) 
+			FMC->PFB1CR |= (FMC_PFB1CR_B1DCE_MASK | FMC_PFB1CR_B1ICE_MASK);
+		else
+			FMC->PFB1CR &= ~(FMC_PFB1CR_B1DCE_MASK | FMC_PFB1CR_B1ICE_MASK);			
+#endif 
 #else
     #error "Unknown flash cache controller"
 #endif // FSL_FEATURE_FTFx_MCM_FLASH_CACHE_CONTROLS
@@ -488,17 +507,28 @@ static inline void flash_cache_enable(bool doEnable)
 static inline void flash_cache_clear(void)
 {
 #if FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS
-    MCM_WR_PLACR_CFCC(MCM, 1);
-#elif defined(CPU_MK66FN2M0VLQ18) || defined(CPU_MK65FN2M0VMI18)
-	  FMC_WR_PFB01CR_CINV_WAY(FMC, 0xf);
+    #if defined(MCM0)
+	      MCM0->PLACR |= MCM_PLACR_CFCC_MASK;
+    #else
+        MCM->PLACR |= MCM_PLACR_CFCC_MASK;
+    #endif
+#elif defined(CPU_MK66FN2M0VLQ18) || defined(CPU_MK66FN2M0VMD18) || defined(CPU_MK65FN2M0VMI18)
+	  FMC->PFB1CR &= ~FMC_PFB1CR_CINV_WAY_MASK;
+	  FMC->PFB1CR |= FMC_PFB1CR_CINV_WAY(0xf);
 #elif FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS
-	  FMC_WR_PFB0CR_CINV_WAY(FMC, 0xf);
+#if defined(CPU_MKV58F1M0VLQ22)
+		//
+#else
+	  FMC->PFB0CR &= ~FMC_PFB0CR_CINV_WAY_MASK;
+	  FMC->PFB0CR |= FMC_PFB0CR_CINV_WAY(0xf);
+#endif
 #else
     #error "Unknown flash cache controller"
 #endif // FSL_FEATURE_FTFx_MCM_FLASH_CACHE_CONTROLS
 }
 
 //@}
+
 
 #if defined(__cplusplus)
 }

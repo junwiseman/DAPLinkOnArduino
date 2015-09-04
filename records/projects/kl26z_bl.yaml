@@ -9,12 +9,12 @@ common:
         - source/daplink_bl/target/iap_api/freescale/driver/flash_densities_kl_series.c
         - source/daplink_bl/target/iap_api/freescale/devices/MKL26Z4
         - source/daplink_bl/target/freescale/kl26z
-        - source/common/cmsis-core/freescale/kl26z
-        - source/common/cmsis-core/freescale/kl26z/armcc
+        - source/common/cmsis-core/freescale/MKL26Z4
+        - source/common/cmsis-core/freescale/MKL26Z4/armcc
         - source/common/hal/freescale/kl26z
 
 tool_specific:
     uvision:
         linker_file:
-            - source/common/cmsis-core/freescale/kl26z/armcc/kl26z_daplink_bl.sct
+            - source/common/cmsis-core/freescale/MKL26Z4/armcc/daplink_bl_MKL26Z4.sct
             

@@ -1,0 +1,20 @@
+common:
+    target:
+        #- mkl27z256xxx4
+         - cortex-m0
+    macros:
+        - INTERFACE_KL27Z
+        - CPU_MKL27Z256VFM4
+        - DAPLINK_BL
+    sources:
+        - source/daplink_bl/target/iap_api/freescale/driver/flash_densities_kl_series.c
+        - source/daplink_bl/target/freescale/kl27z
+        - source/common/cmsis-core/freescale/MKL27Z4
+        - source/common/cmsis-core/freescale/MKL27Z4/armcc
+        - source/common/hal/freescale/kl27z
+
+tool_specific:
+    uvision:
+        linker_file:
+            - source/common/cmsis-core/freescale/MKL27Z4/armcc/daplink_bl_MKL27Z4.sct
+            

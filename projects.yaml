@@ -1,6 +1,6 @@
 settings:
     export_dir:
-        - projectfiles/$tool$/$project_name$
+        - projectfiles/{tool}/{project_name}
     tools:
         uvision:
             template:
@@ -22,14 +22,76 @@ module:
         - records/common/daplink_if.yaml
 
 projects:
+
+    # -------------------------------------------
+    # DAP-Link Bootloaders
+    # -------------------------------------------
+
     kl26z_bl:
         - *module_tools
         - *module_bl
         - records/common/rtos-cm0.yaml
         - records/common/fsl_flash_driver.yaml
         - records/projects/kl26z_bl.yaml
+
+    kl27z_bl:
+        - *module_tools
+        - *module_bl
+        - records/common/rtos-cm0.yaml
+        - records/common/fsl_flash_driver.yaml
+        - records/projects/kl27z_bl.yaml
+
+    k20d_bl:
+        - *module_tools
+        - *module_bl
+        - records/common/rtos-cm3.yaml
+        - records/common/fsl_flash_driver.yaml
+        - records/projects/k20d_bl.yaml
+
+    k22f_usb_kw01_bl:
+        - *module_tools
+        - *module_bl
+        - records/common/rtos-cm3.yaml
+        - records/common/fsl_flash_driver.yaml
+        - records/projects/k22f_usb_kw01_bl.yaml
+
+    k22f_usb_kw40_bl:
+        - *module_tools
+        - *module_bl
+        - records/common/rtos-cm3.yaml
+        - records/common/fsl_flash_driver.yaml
+        - records/projects/k22f_usb_kw40_bl.yaml
+
+    # -------------------------------------------
+    # DAP-Link Debug Interfaces
+    # -------------------------------------------
+
     kl26z_nrf51822_if:
         - *module_tools
         - *module_if
         - records/common/rtos-cm0.yaml
         - records/projects/kl26z_nrf51822_if.yaml
+
+    kl27z_kl27z_if:
+        - *module_tools
+        - *module_if
+        - records/common/rtos-cm0.yaml
+        - records/projects/kl27z_kl27z_if.yaml
+
+    k20d_kl46z_if:
+        - *module_tools
+        - *module_if
+        - records/common/rtos-cm3.yaml
+        - records/projects/k20d_kl46z_if.yaml
+
+    k22f_usb_kw01_if:
+        - *module_tools
+        - *module_if
+        - records/common/rtos-cm3.yaml
+        - records/projects/k22f_usb_kw01_if.yaml
+
+    k22f_usb_kw40_if:
+        - *module_tools
+        - *module_if
+        - records/common/rtos-cm3.yaml
+        - records/projects/k22f_usb_kw40_if.yaml

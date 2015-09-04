@@ -16,8 +16,8 @@
 
 #include "target_flash.h"
 #include "target_config.h"
+#include "flash_blob.h"
 #include "swd_host.h"
-#include "target_flash.inc"
 #include "target_reset.h"
 #include "DAP_config.h"
 #include "string.h"

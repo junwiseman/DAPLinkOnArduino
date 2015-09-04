@@ -72,7 +72,24 @@ const uint16_t kFlashDensities[] = {
         0,      // 0xc - reserved
         0,      // 0xd - reserved
         0,      // 0xe - reserved
-        16,     // 0x0f - 65536        
+        16,     // 0x0f - 65536    
+#elif defined(KL28Z7_SERIES)
+        0,  // 0 - reserved
+        0,  // 1 - reserved
+        0,  // 2 - reserved
+        0,  // 3 - reserved
+        0,  // 4 - reserved
+        16, // 5 - 65536
+        0,  // 6 - reserved
+        32, // 7 - 131072
+        0,  // 8 - reserved
+        64, // 9 - 262144
+        0,  // 0xa - reserved
+        128,// 0xb - 524288
+        0,  // 0xc - reserved
+        0,  // 0xd - reserved
+        0,  // 0xe - reserved
+        128,// 0x0f - 524288, which is the maximum flash size supported by KL28						
 #elif defined(KL43Z4_SERIES)
         2,  // 0 - 8192
         4,  // 1 - 16384
@@ -90,6 +107,40 @@ const uint16_t kFlashDensities[] = {
         0,  // 0xd - reserved
         0,  // 0xe - reserved
         64, // 0x0f - 262144, which is the maximum flash size supported by KL43
+#elif defined(KL81Z7_SERIES)
+        0,  // 0 - reserved
+        0,  // 1 - reserved
+        0,  // 2 - reserved
+        8,  // 3 - 32kB
+        0,  // 4 - reserved
+        16, // 5 - 64kB
+        0,  // 6 - reserved
+        32, // 7 - 128kB
+        0,  // 8 - reserved
+        64, // 9 - 256kB
+        0,  // 0xa - reserved
+        128,// 0xb - 512kB
+        0,  // 0xc - reserved
+        256,// 0xd - 1MB
+        0,  // 0xe - reserved
+        32, // 0xf - 128kB
+#elif defined(KW40Z4_SERIES)
+        0,  // 0 - reserved
+        0,  // 1 - reserved
+        0,  // 2 - reserved
+        0,  // 3 - reserved
+        0,  // 4 - reserved
+        0,  // 5 - reserved
+        0,  // 6 - reserved
+        0,  // 7 - reserved
+        0,  // 8 - reserved
+        0,  // 9 - reserved
+        0,  // 0xa - reserved
+        0,  // 0xb - reserved
+        0,  // 0xc - reserved
+        0,  // 0xd - reserved
+        0,  // 0xe - reserved
+        40, // 0x0f - 160kB 
 #else
         2,  // 0 - 8192
         4,  // 1 - 16384

@@ -21,6 +21,31 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
+		
+typedef struct {
+    uint32_t breakpoint;
+    uint32_t static_base;
+    uint32_t stack_pointer;
+} program_syscall_t;
+
+typedef struct {
+
+    uint32_t init;
+    uint32_t uninit;
+    uint32_t erase_chip;
+    uint32_t erase_sector;
+    uint32_t program_page;
+
+    program_syscall_t sys_call_param;
+
+    uint32_t program_buffer;
+    uint32_t algo_start;
+    uint32_t algo_size;
+    const uint32_t * image;
+
+    uint32_t ram_to_flash_bytes_to_be_written;
+
+} TARGET_FLASH;
       
 typedef enum extension {
     UNKNOWN = 0,

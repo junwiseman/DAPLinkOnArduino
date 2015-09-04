@@ -19,6 +19,7 @@
 void gpio_init(void)
 {
     SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK;
+	
     // configure pin as GPIO
     PIN_HID_LED_PORT->PCR[PIN_HID_LED_BIT] = PORT_PCR_MUX(1);
     PIN_MSC_LED_PORT->PCR[PIN_MSC_LED_BIT] = PORT_PCR_MUX(1);
@@ -33,11 +34,13 @@ void gpio_init(void)
     
     // power regulator on
     PIN_POWER_EN_GPIO->PDOR |= PIN_POWER_EN;
+	
     // set as output
-    PIN_HID_LED_GPIO->PDDR |= PIN_HID_LED;
-    PIN_MSC_LED_GPIO->PDDR |= PIN_MSC_LED;
-    PIN_CDC_LED_GPIO->PDDR |= PIN_CDC_LED;
+    PIN_HID_LED_GPIO->PDDR  |= PIN_HID_LED;
+    PIN_MSC_LED_GPIO->PDDR  |= PIN_MSC_LED;
+    PIN_CDC_LED_GPIO->PDDR  |= PIN_CDC_LED;
     PIN_POWER_EN_GPIO->PDDR |= PIN_POWER_EN;
+		
     // set as input
     PIN_SW_RESET_GPIO->PDDR &= ~PIN_SW_RESET;
 }

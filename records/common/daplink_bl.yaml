@@ -1,10 +1,11 @@
 common:
-    group_name:
-        - daplink_bl
+    includes:
+        - source/common/cmsis-core/freescale
     sources:
-        - source/daplink_bl
-        - source/daplink_bl/target
-        - source/daplink_bl/target/iap_api
-        - source/common/cmsis-core
-        - source/common/hal
+        daplink_bl:
+            - source/daplink_bl
+            - source/daplink_bl/target
+            - source/daplink_bl/target/iap_api
+            - source/common/cmsis-core
+            - source/common/hal
         

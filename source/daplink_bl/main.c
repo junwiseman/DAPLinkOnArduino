@@ -239,6 +239,7 @@ int main (void)
 {
     // init leds and button
     gpio_init();
+	
     // check for invalid app image or rst button press. Should be checksum or CRC but NVIC validation is better than nothing
     if (gpio_get_sw_reset() && validate_bin_nvic((uint8_t*)APP_OFFSET)) {
         // change to the new vector table
@@ -246,6 +247,7 @@ int main (void)
         // modify stack pointer and start app
         modify_stack_pointer_and_start_app(INITIAL_SP, RESET_HANDLER);
     }
+		
     // config the usb interface descriptor and web auth token before USB connects
     //unique_string_auth_config();
     // either the rst pin was pressed or we have an empty app region

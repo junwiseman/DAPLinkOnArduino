@@ -1,0 +1,24 @@
+common:
+    target:
+        #- mkl27z256xxx4
+         - cortex-m0
+    macros:
+        - INTERFACE_MKL27Z
+        - TARGET_MKL27Z
+        - APP_OFFSET_32K
+        - DAPLINK_IF
+    includes:
+        - source/daplink_if/target/freescale/kl27z
+    sources:
+        - source/daplink_if/target/freescale/target_flash.c
+        - source/daplink_if/target/freescale/target_reset_Lseries.c
+        - source/daplink_if/target/freescale/kl27z/frdm_kl27z_app_config.c
+        - source/common/cmsis-core/freescale/MKL27Z4
+        - source/common/cmsis-core/freescale/MKL27Z4/armcc
+        - source/common/hal/freescale/kl27z
+
+tool_specific:
+    uvision:
+        linker_file:
+            - source/common/cmsis-core/freescale/MKL27Z4/armcc/daplink_if_MKL27Z4.sct
+            
