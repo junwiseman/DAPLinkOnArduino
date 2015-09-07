@@ -9,9 +9,8 @@ common:
     includes:
         - source/daplink_if/target/freescale/kl46z
     sources:
-        - source/daplink_if/target/freescale/target_flash.c
         - source/daplink_if/target/freescale/target_reset_Kseries.c
-        - source/daplink_if/target/freescale/kw01z/frdm_kl46z_app_config.c
+        - source/daplink_if/target/freescale/kl46z/app_config.c
         - source/common/cmsis-core/freescale/MK20D5
         - source/common/cmsis-core/freescale/MK20D5/armcc
         - source/common/hal/freescale/k20dx

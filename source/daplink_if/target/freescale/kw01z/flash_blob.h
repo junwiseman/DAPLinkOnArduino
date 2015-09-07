@@ -17,7 +17,31 @@
 #ifndef FLASH_BLOB_H
 #define FLASH_BLOB_H
 
-#include "target_flash.h"
+#include "stdint.h"
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+typedef struct {
+    uint32_t breakpoint;
+    uint32_t static_base;
+    uint32_t stack_pointer;
+} program_syscall_t;
+
+typedef struct {
+    const uint32_t  init;
+    const uint32_t  uninit;
+    const uint32_t  erase_chip;
+    const uint32_t  erase_sector;
+    const uint32_t  program_page;
+    const program_syscall_t sys_call_s;
+    const uint32_t  program_buffer;
+    const uint32_t  algo_start;
+    const uint32_t  algo_size;
+    const uint32_t *algo_blob;
+    const uint32_t  program_buffer_size;
+} program_target_t;
 
 static const uint32_t KW01Z_FLM[] = {
     0xE00ABE00, 0x062D780D, 0x24084068, 0xD3000040, 0x1E644058, 0x1C49D1FA, 0x2A001E52, 0x4770D1F2,
@@ -67,28 +91,32 @@ static const uint32_t KW01Z_FLM[] = {
     0x00000000, 
 };
 
-static const TARGET_FLASH flash = {
-    0x20000021, // Init
-    0x20000039, // UnInit
-    0x2000003D, // EraseChip
-    0x20000061, // EraseSector
-    0x2000008F, // ProgramPage
+static const program_target_t flash = {
+    .init = 0x20000021, // Init
+    .uninit = 0x20000039, // UnInit
+    .erase_chip = 0x2000003D, // EraseChip
+    .erase_sector = 0x20000061, // EraseSector
+    .program_page = 0x2000008F, // ProgramPage
 
     // breakpoint = RAM start + 1
     // RSB : base address is address of Execution Region PrgData in map file
     //       to access global/static data
     // RSP : Initial stack pointer
     {
-        0x20000001, // breakpoint instruction address
-        0x20000000 + 0x20 + 560,  // static base register value (image start + header + static base offset)
-        0x20000800  // initial stack pointer
+        .breakpoint = 0x20000001, // breakpoint instruction address
+        .static_base = 0x20000000 + 0x20 + 560,  // static base register value (image start + header + static base offset)
+        .stack_pointer = 0x20000800  // initial stack pointer
     },
 
-    0x20000a00, // program_buffer, any valid RAM location with +512 bytes of headroom
-    0x20000000, // algo_start, start of RAM
-    sizeof(KW01Z_FLM), // algo_size, size of array above
-    KW01Z_FLM,  // image, flash algo instruction array
-    512        // ram_to_flash_bytes_to_be_written
+    .program_buffer = 0x20000a00, // program_buffer, any valid RAM location with +512 bytes of headroom
+    .algo_start = 0x20000000, // algo_start, start of RAM
+    .algo_size = sizeof(KW01Z_FLM), // algo_size, size of array above
+    .algo_blob = KW01Z_FLM,  // image, flash algo instruction array
+    .program_buffer_size = 512 // should be USBD_MSC_BlockSize
 };
+
+#ifdef __cplusplus
+  }
+#endif
 
 #endif

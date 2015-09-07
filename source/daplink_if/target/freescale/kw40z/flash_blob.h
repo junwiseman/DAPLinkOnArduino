@@ -14,6 +14,37 @@
  * limitations under the License.
  */
 
+#ifndef FLASH_BLOB_H
+#define FLASH_BLOB_H
+
+#include "stdint.h"
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+typedef struct {
+    uint32_t breakpoint;
+    uint32_t static_base;
+    uint32_t stack_pointer;
+} program_syscall_t;
+
+
+typedef struct {
+    const uint32_t  init;
+    const uint32_t  uninit;
+    const uint32_t  erase_chip;
+    const uint32_t  erase_sector;
+    const uint32_t  program_page;
+    const program_syscall_t sys_call_s;
+    const uint32_t  program_buffer;
+    const uint32_t  algo_start;
+    const uint32_t  algo_size;
+    const uint32_t *algo_blob;
+    const uint32_t  program_buffer_size;
+} program_target_t;
+
+
 static const uint32_t mkw40z4_flash_prog_blob[] = {
     0xE00ABE00, 0x062D780D, 0x24084068, 0xD3000040, 0x1E644058, 0x1C49D1FA, 0x2A001E52, 0x4770D1F2,
     0x09032200, 0xd373428b, 0x428b0a03, 0x0b03d358, 0xd33c428b, 0x428b0c03, 0xe012d321, 0x430b4603, 
@@ -68,25 +99,27 @@ static const uint32_t mkw40z4_flash_prog_blob[] = {
     0x00280000, 0x40020004, 0x00000000, 
 };
 
-static const TARGET_FLASH flash = {
-    0x2000027D, // Init
-    0x200002E5, // UnInit
-    0x20000209, // EraseChip
-    0x2000023D, // EraseSector
-    0x2000029D, // ProgramPage
-
-    // BKPT : start of blob + 1
-    // RSB  : blob start + header + rw data offset
-    // RSP  : stack pointer
+static const program_target_t flash = {
+    .init = 0x2000027D, 
+    .uninit = 0x200002E5, 
+    .erase_chip = 0x20000209, 
+    .erase_sector = 0x2000023D, 
+    .program_page = 0x2000029D, 
     {
-        0x20000000 + 0x00000001,
-        0x20000000 + 0x00000020 + 0x00000628,
-        0x20000800
+        .breakpoint = 0x20000001,
+        .static_base = 0x20000020 + 0x00000628,
+        .stack_pointer = 0x20000800
     },
-
-    0x20000000 + 0x00000A00,   // mem buffer location
-    0x20000000,                // location to write prog_blob in target RAM
-    sizeof(mkw40z4_flash_prog_blob), // prog_blob size
-    mkw40z4_flash_prog_blob,         // address of prog_blob
-    0x00000200                 // ram_to_flash_bytes_to_be_written
+    .program_buffer = 0x00000A00,
+    .algo_start = 0x20000000,
+    .algo_size = sizeof(mkw40z4_flash_prog_blob),
+    .algo_blob = mkw40z4_flash_prog_blob,
+    .program_buffer_size = 512 // should be USBD_MSC_BlockSize
 };
+
+#ifdef __cplusplus
+  }
+#endif
+
+#endif
+

@@ -101,7 +101,7 @@
 #define PIN_CDC_LED_BIT         (12)
 #define PIN_CDC_LED             (1<<PIN_CDC_LED_BIT)
 
-// SW RESET BUTTON PTB1
+// SW RESET BUTTON PTC5
 #define PIN_SW_RESET_PORT       PORTC
 #define PIN_SW_RESET_GPIO       PTC
 #define PIN_SW_RESET_BIT        (5)

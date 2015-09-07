@@ -10,9 +10,8 @@ common:
     includes:
         - source/daplink_if/target/freescale/kl27z
     sources:
-        - source/daplink_if/target/freescale/target_flash.c
         - source/daplink_if/target/freescale/target_reset_Lseries.c
-        - source/daplink_if/target/freescale/kl27z/frdm_kl27z_app_config.c
+        - source/daplink_if/target/freescale/kl27z/app_config.c
         - source/common/cmsis-core/freescale/MKL27Z4
         - source/common/cmsis-core/freescale/MKL27Z4/armcc
         - source/common/hal/freescale/kl27z

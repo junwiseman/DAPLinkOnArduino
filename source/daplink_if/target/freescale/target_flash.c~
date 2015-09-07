@@ -62,11 +62,11 @@ target_flash_status_t target_flash_init(extension_t ext)
     }
     
     // Download flash programming algorithm to target and initialise.
-    if (!swd_write_memory(flash.algo_start, (uint8_t *)flash.image, flash.algo_size)) {
+    if (!swd_write_memory(flash.algo_start, (uint8_t *)flash.algo_blob, flash.algo_size)) {
         return TARGET_FAIL_ALGO_DL;
     }
 
-    if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.init, 0, 0 /* clk value is not used */, 0, 0)) {
+    if (!swd_flash_syscall_exec(&flash.sys_call_s, flash.init, 0, 0 /* clk value is not used */, 0, 0)) {
         return TARGET_FAIL_INIT;
     }
 
@@ -75,7 +75,7 @@ target_flash_status_t target_flash_init(extension_t ext)
 
 target_flash_status_t target_flash_erase_sector(unsigned int sector)
 {
-    if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_sector, sector * target_device.sector_size, 0, 0, 0)) {
+    if (!swd_flash_syscall_exec(&flash.sys_call_s, flash.erase_sector, sector * target_device.sector_size, 0, 0, 0)) {
         return TARGET_FAIL_ERASE_SECTOR;
     }
 
@@ -84,7 +84,7 @@ target_flash_status_t target_flash_erase_sector(unsigned int sector)
 
 target_flash_status_t target_flash_erase_chip(void)
 {
-    if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_chip, 0, 0, 0, 0)) {
+    if (!swd_flash_syscall_exec(&flash.sys_call_s, flash.erase_chip, 0, 0, 0, 0)) {
         return TARGET_FAIL_ERASE_ALL;
     }
 
@@ -153,16 +153,16 @@ target_flash_status_t target_flash_program_page(uint32_t addr, uint8_t * buf, ui
     }
 
     while(bytes_written < size) {
-        if (!swd_flash_syscall_exec(&flash.sys_call_param,
+        if (!swd_flash_syscall_exec(&flash.sys_call_s,
                                     flash.program_page,
                                     addr,
-                                    flash.ram_to_flash_bytes_to_be_written,
+                                    flash.program_buffer_size,
                                     flash.program_buffer + bytes_written, 0)) {
             return TARGET_FAIL_WRITE;
         }
 
-        bytes_written += flash.ram_to_flash_bytes_to_be_written;
-        addr += flash.ram_to_flash_bytes_to_be_written;
+        bytes_written += flash.program_buffer_size;
+        addr += flash.program_buffer_size;
     }
 
     return TARGET_OK;
