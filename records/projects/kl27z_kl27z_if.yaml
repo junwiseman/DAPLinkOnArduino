@@ -1,12 +1,11 @@
 common:
     target:
-        #- mkl27z256xxx4
-         - cortex-m0
+        - mkl27z256xxx4
     macros:
+        - DAPLINK_IF
+        - APP_OFFSET_32K
         - INTERFACE_MKL27Z
         - TARGET_MKL27Z
-        - APP_OFFSET_32K
-        - DAPLINK_IF
     includes:
         - source/daplink_if/target/freescale/kl27z
     sources:

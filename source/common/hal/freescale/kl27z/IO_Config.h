@@ -21,22 +21,40 @@
 
 // Debug Port I/O Pins
 
-// SWCLK Pin                    PTC5(C5)
-#define PIN_SWCLK_PORT          PORTC
-#define PIN_SWCLK_GPIO          PTC
+// SWCLK Pin                    PTD5(D5)
+#define PIN_SWCLK_PORT          PORTD
+#define PIN_SWCLK_GPIO          PTD
 #define PIN_SWCLK_BIT           (5)
 #define PIN_SWCLK               (1<<PIN_SWCLK_BIT)
 
-// SWDIO Pin                    PTC6(C6)
-#define PIN_SWDIO_PORT          PORTC
-#define PIN_SWDIO_GPIO          PTC
-#define PIN_SWDIO_BIT           (6)
-#define PIN_SWDIO               (1<<PIN_SWDIO_BIT)
+// SWDIO Out Pin                PTD6
+#define PIN_SWDIO_OUT_PORT      PORTD
+#define PIN_SWDIO_OUT_GPIO      PTD
+#define PIN_SWDIO_OUT_BIT       (6)
+#define PIN_SWDIO_TX            (1<<PIN_SWDIO_OUT_BIT)
 
-// nRESET Pin                   PTC8(C8)
-#define PIN_nRESET_PORT         PORTC
-#define PIN_nRESET_GPIO         PTC
-#define PIN_nRESET_BIT          (8)
+// SWDIO In Pin                 PTD7
+#define PIN_SWDIO_IN_PORT       PORTD
+#define PIN_SWDIO_IN_GPIO       PTD
+#define PIN_SWDIO_IN_BIT        (7)
+#define PIN_SWDIO_RX            (1<<PIN_SWDIO_IN_BIT)
+
+// SWDIO Neg. Output Enable Pin PTD4
+#define PIN_SWDIO_NOE_PORT      PORTD
+#define PIN_SWDIO_NOE_GPIO      PTD
+#define PIN_SWDIO_NOE_BIT       (4)
+#define PIN_SWDIO_NOE           (1<<PIN_SWDIO_NOE_BIT)
+
+// SWD Neg. Enable Pin          PTA2
+#define PIN_SWD_NOE_PORT        PORTA
+#define PIN_SWD_NOE_GPIO        PTA
+#define PIN_SWD_NOE_BIT         2
+#define PIN_SWD_NOE             (1<<PIN_SWD_NOE_BIT)
+
+// nRESET Pin                   PTA1
+#define PIN_nRESET_PORT         PORTA
+#define PIN_nRESET_GPIO         PTA
+#define PIN_nRESET_BIT          (1)
 #define PIN_nRESET              (1<<PIN_nRESET_BIT)
 
 // PWR_REG_EN PTD2 - Not connected
@@ -54,20 +72,20 @@
 // Debug Unit LEDs
 
 // HID_LED PTD4
-#define PIN_HID_LED_PORT        PORTD
-#define PIN_HID_LED_GPIO        PTD
+#define PIN_HID_LED_PORT        PORTA
+#define PIN_HID_LED_GPIO        PTA
 #define PIN_HID_LED_BIT         (4)
 #define PIN_HID_LED             (1<<PIN_HID_LED_BIT)
 
 // MSC_LED PTD5
-#define PIN_MSC_LED_PORT        PORTD
-#define PIN_MSC_LED_GPIO        PTD
+#define PIN_MSC_LED_PORT        PORTA
+#define PIN_MSC_LED_GPIO        PTA
 #define PIN_MSC_LED_BIT         (4)
 #define PIN_MSC_LED             (1<<PIN_MSC_LED_BIT)
 
 // CDC_LED PTD6
-#define PIN_CDC_LED_PORT        PORTD
-#define PIN_CDC_LED_GPIO        PTD
+#define PIN_CDC_LED_PORT        PORTA
+#define PIN_CDC_LED_GPIO        PTA
 #define PIN_CDC_LED_BIT         (4)
 #define PIN_CDC_LED             (1<<PIN_CDC_LED_BIT)
 
@@ -88,11 +106,13 @@
 // UART
 #define UART_PORT               PORTA
 #define UART_NUM                (1)
+
 // RX PTA18
 #define PIN_UART_RX_GPIO        PTA
 #define PIN_UART_RX_BIT         (18)
 #define PIN_UART_RX             (1<<PIN_UART_RX_BIT)
 #define PIN_UART_RX_MUX_ALT     (3)
+
 // TX PTA19
 #define PIN_UART_TX_GPIO        PTA
 #define PIN_UART_TX_BIT         (19)

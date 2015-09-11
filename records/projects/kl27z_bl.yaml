@@ -1,7 +1,6 @@
 common:
     target:
-        #- mkl27z256xxx4
-         - cortex-m0
+        - mkl27z256xxx4
     macros:
         - INTERFACE_KL27Z
         - CPU_MKL27Z256VFM4

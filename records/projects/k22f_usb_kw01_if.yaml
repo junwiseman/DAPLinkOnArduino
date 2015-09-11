@@ -10,7 +10,7 @@ common:
     includes:
         - source/daplink_if/target/freescale/kw01z
     sources:
-        - source/daplink_if/target/freescale/target_reset_Kseries.c
+        - source/daplink_if/target/freescale/target_reset_Lseries.c
         - source/daplink_if/target/freescale/kw01z/app_config.c
         - source/common/cmsis-core/freescale/MK22F51212
         - source/common/cmsis-core/freescale/MK22F51212/armcc
