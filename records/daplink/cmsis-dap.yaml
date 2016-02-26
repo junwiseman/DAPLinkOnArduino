@@ -3,4 +3,6 @@ common:
         - source/daplink/cmsis-dap
     sources:
         cmsis-dap:
-            - source/daplink/cmsis-dap
+            - source/daplink/cmsis-dap/DAP.c
+            - source/daplink/cmsis-dap/JTAG_DP.c
+            - source/daplink/cmsis-dap/SW_DP.c
