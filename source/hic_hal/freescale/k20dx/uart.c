@@ -32,6 +32,7 @@ static void clear_buffers(void);
 
 // Size must be 2^n for using quick wrap around
 #define  BUFFER_SIZE (512)
+#define  BUFFER_MASK (BUFFER_SIZE - 1)
 
 struct {
     uint8_t  data[BUFFER_SIZE];
@@ -188,7 +189,7 @@ int32_t uart_write_data(uint8_t *data, uint16_t size)
 
         if (len_in_buf < BUFFER_SIZE) {
             write_buffer.data[write_buffer.idx_in++] = *data++;
-            write_buffer.idx_in &= (BUFFER_SIZE - 1);
+            write_buffer.idx_in &= BUFFER_MASK;
             write_buffer.cnt_in++;
             cnt++;
         }
@@ -215,10 +216,9 @@ int32_t uart_read_data(uint8_t *data, uint16_t size)
     cnt = 0;
 
     while (size--) {
-        if (read_buffer.cnt_in != read_buffer.cnt_out) {
+        if (read_buffer.idx_out != read_buffer.idx_in) {
             *data++ = read_buffer.data[read_buffer.idx_out++];
-            read_buffer.idx_out &= (BUFFER_SIZE - 1);
-            read_buffer.cnt_out++;
+            read_buffer.idx_out &= BUFFER_MASK;
             cnt++;
         } else {
             break;
@@ -248,7 +248,7 @@ void UART1_RX_TX_IRQHandler(void)
         util_assert(write_buffer.cnt_in != write_buffer.cnt_out);
         // Send out data
         UART1->D = write_buffer.data[write_buffer.idx_out++];
-        write_buffer.idx_out &= (BUFFER_SIZE - 1);
+        write_buffer.idx_out &= BUFFER_MASK;
         write_buffer.cnt_out++;
         // Turn off the transmitter if that was the last byte
         if (write_buffer.cnt_in == write_buffer.cnt_out) {
@@ -263,8 +263,11 @@ void UART1_RX_TX_IRQHandler(void)
             errorData = UART1->D;
         } else {
             read_buffer.data[read_buffer.idx_in++] = UART1->D;
-            read_buffer.idx_in &= (BUFFER_SIZE - 1);
-            read_buffer.cnt_in++;
+            read_buffer.idx_in &= BUFFER_MASK;
+            if (((read_buffer.idx_in) & BUFFER_MASK) == read_buffer.idx_out) {
+            	read_buffer.idx_out++;
+            	read_buffer.idx_out &= BUFFER_MASK;
+            }
         }
     }
 }
