@@ -309,7 +309,12 @@ int32_t uart_enable(void)
                  | (1 <<  7)                  // TXDIS: Disable transmitter
                  | (1 <<  8)                  // RSTSTA: Reset status/error bits
                  ;
-    _SetBaudrate(_Baudrate);
+
+    UART_CR    = (0)
+                 | (1 <<  2)                  // RSTRX: Reset Receiver: 1 = The receiver logic is reset.
+                 | (1 <<  3)                  // RSTTX: Reset Transmitter: 1 = The transmitter logic is reset.
+                 ;
+
     UART_CR    = (0)
                  | (0 <<  2)                  // RSTRX: Release Receiver reset
                  | (0 <<  3)                  // RSTTX: Release Transmitter reset
@@ -319,12 +324,18 @@ int32_t uart_enable(void)
                  | (0 <<  7)                  // TXDIS: Do not disable transmitter
                  | (1 <<  8)                  // RSTSTA: Reset status/error bits
                  ;
+
+    UART_MR    = (0)
+                 | (4 <<  9)                  // PAR: Parity Type: 4     => No parity
+                 | (0 << 14)                  // CHMODE: Channel Mode: 0 => Normal mode
+    _SetBaudrate(_Baudrate);
+    _ResetBuffers();
     UART_IER   = (0)
                  | (1 <<  0)                  // Enable Rx Interrupt
                  | (0 <<  9)                  // Initially disable TxEmpty Interrupt
                  | (0 <<  4)                  // Initially disable ENDTx Interrupt
                  ;
-    _ResetBuffers();
+
     UART_IntrEna();
     return 1;
 }
