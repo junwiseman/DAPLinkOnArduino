@@ -293,6 +293,42 @@ int32_t uart_initialize(void)
     return 1;  // O.K. ???
 }
 
+int32_t uart_disable(void)
+{
+    UART_IntrDis();
+    UART_IDR   = (0xFFFFFFFF);              // Disable all interrupts
+    return 1;
+}
+
+int32_t uart_enable(void)
+{
+    UART_IntrDis();
+    UART_IDR   = (0xFFFFFFFF);   // Disable all interrupts
+    UART_CR    = (0)
+                 | (1 <<  5)                  // RXDIS: Disable receiver
+                 | (1 <<  7)                  // TXDIS: Disable transmitter
+                 | (1 <<  8)                  // RSTSTA: Reset status/error bits
+                 ;
+    _SetBaudrate(_Baudrate);
+    UART_CR    = (0)
+                 | (0 <<  2)                  // RSTRX: Release Receiver reset
+                 | (0 <<  3)                  // RSTTX: Release Transmitter reset
+                 | (1 <<  4)                  // RXEN: Receiver Enable
+                 | (0 <<  5)                  // RXDIS: Do not disable receiver
+                 | (1 <<  6)                  // TXEN: Transmitter Enable
+                 | (0 <<  7)                  // TXDIS: Do not disable transmitter
+                 | (1 <<  8)                  // RSTSTA: Reset status/error bits
+                 ;
+    UART_IER   = (0)
+                 | (1 <<  0)                  // Enable Rx Interrupt
+                 | (0 <<  9)                  // Initially disable TxEmpty Interrupt
+                 | (0 <<  4)                  // Initially disable ENDTx Interrupt
+                 ;
+    _ResetBuffers();
+    UART_IntrEna();
+    return 1;
+}
+
 int32_t uart_uninitialize(void)
 {
     UART_IntrDis();

@@ -99,6 +99,24 @@ int32_t uart_initialize(void)
     return 1;
 }
 
+int32_t uart_disable(void)
+{
+    // disable interrupt
+    LPC_USART->IER &= ~(0x7);
+    NVIC_DisableIRQ(UART_IRQn);
+}
+
+int32_t uart_enable(void)
+{
+    NVIC_DisableIRQ(UART_IRQn);
+    // enable FIFOs (trigger level 1) and clear them
+    LPC_USART->FCR = 0x87;
+    // Transmit Enable
+    LPC_USART->TER     = 0x01;
+    // enable rx and tx interrupt
+    LPC_USART->IER |= (1 << 0) | (1 << 1);
+    NVIC_EnableIRQ(UART_IRQn);
+}
 
 int32_t uart_uninitialize(void)
 {

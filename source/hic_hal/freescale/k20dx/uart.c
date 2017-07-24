@@ -78,6 +78,35 @@ int32_t uart_initialize(void)
     return 1;
 }
 
+int32_t uart_disable(void)
+{
+    // transmitter and receiver disabled
+    UART1->C2 &= ~(UART_C2_RE_MASK | UART_C2_TE_MASK);
+    // disable interrupt
+    UART1->C2 &= ~(UART_C2_RIE_MASK | UART_C2_TIE_MASK);
+    return 1;
+}
+
+int32_t uart_enable(void)
+{
+    // disable interrupt
+    NVIC_DisableIRQ(UART1_RX_TX_IRQn);
+    // transmitter and receiver disabled
+    UART1->C2 &= ~(UART_C2_RE_MASK | UART_C2_TE_MASK);
+    // disable interrupt
+    UART1->C2 &= ~(UART_C2_RIE_MASK | UART_C2_TIE_MASK);
+
+    clear_buffers();
+
+    // Enable receiver and transmitter
+    UART1->C2 |= UART_C2_RE_MASK | UART_C2_TE_MASK;
+    // Enable receive interrupt
+    UART1->C2 |= UART_C2_RIE_MASK;
+    NVIC_ClearPendingIRQ(UART1_RX_TX_IRQn);
+    NVIC_EnableIRQ(UART1_RX_TX_IRQn);
+    return 1;
+}
+
 int32_t uart_uninitialize(void)
 {
     // transmitter and receiver disabled
