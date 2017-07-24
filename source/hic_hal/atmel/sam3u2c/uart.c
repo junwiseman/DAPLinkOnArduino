@@ -327,7 +327,7 @@ int32_t uart_enable(void)
 
     UART_MR    = (0)
                  | (4 <<  9)                  // PAR: Parity Type: 4     => No parity
-                 | (0 << 14)                  // CHMODE: Channel Mode: 0 => Normal mode
+                 | (0 << 14);                 // CHMODE: Channel Mode: 0 => Normal mode
     _SetBaudrate(_Baudrate);
     _ResetBuffers();
     UART_IER   = (0)
